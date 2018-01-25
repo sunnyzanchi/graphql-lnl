@@ -1,0 +1,9 @@
+{
+  "name": "graphql-lnl",
+  "version": "0.1.0",
+  "description": "Lunching and Learning GraphQL by example",
+  "main": "index.js",
+  "repository": "https://github.com/zanchi/graphql-lnl",
+  "author": "Eric Zanchi",
+  "license": "MIT"
+}
