@@ -5,5 +5,10 @@
   "main": "index.js",
   "repository": "https://github.com/zanchi/graphql-lnl",
   "author": "Eric Zanchi",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.12.3"
+  }
 }
