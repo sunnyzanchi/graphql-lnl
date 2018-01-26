@@ -6,10 +6,14 @@
   "repository": "https://github.com/zanchi/graphql-lnl",
   "author": "Eric Zanchi",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
   "dependencies": {
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",
-    "graphql": "^0.12.3"
+    "graphql": "^0.12.3",
+    "nodemon": "^1.14.11"
   },
   "devDependencies": {
     "eslint": "^4.16.0",
