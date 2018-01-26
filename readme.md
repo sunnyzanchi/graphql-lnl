@@ -51,10 +51,10 @@ module.exports = new GraphQLSchema({
 });
 ```
 
-Once we have these files saved, we can go ahead and start up our very first GraphQL server! Just run:
+Once we have these files saved, we can go ahead and start up our very first GraphQL server! Nodemon watches for changes and restarts automatically, so we should just need to run this once. Just run:
 
 ```
-node ./index.js
+yarn start
 ```
 
 If you navigate to `localhost:1234/` you should see the GraphiQL interface. Let's give our server its first query. In the text area on the left, type:
