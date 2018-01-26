@@ -1,4 +1,11 @@
-const { GraphQLInt, GraphQLObjectType, GraphQLString } = require('graphql');
+const axios = require('axios');
+const {
+  GraphQLInt,
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLString
+} = require('graphql');
+const VehicleType = require('./vehicle');
 
 module.exports = new GraphQLObjectType({
   description: 'Data about a particular person',
@@ -55,6 +62,18 @@ module.exports = new GraphQLObjectType({
         return person.skin_color;
       },
       type: GraphQLString
+    },
+    vehicles: {
+      description: 'Vehicles the person has piloted',
+      async resolve(person) {
+        const getVehicles = person.vehicles.map(v =>
+          axios.get(v + '?format=json')
+        );
+
+        const results = await Promise.all(getVehicles);
+        return results.map(result => result.data);
+      },
+      type: new GraphQLList(VehicleType)
     }
   },
   name: 'PersonType'
