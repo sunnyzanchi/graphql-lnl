@@ -123,3 +123,8 @@ module.exports = new GraphQLObjectType({
 ```
 
 If you have a bit of extra time, you can take a minute to try and implement one of the related fields. If you want to look at an example, this repo has the `vehicles` field added on the Person type at tag `step3.1`.
+
+## Mutations
+Querying data is great. I love querying data. But if you're less of an output kind of person and more of input kind of person, you might be tired of all these queries. Fortunately, GraphQL has mutations that allow user input. Now, technically, regular old queries can update data, cause side effects — basically anything you code them to do — but that's bad practice. GraphQL mutations are explicit in the data that they allow to be inputted and provide type checking for arguments. I know you must be foaming at the mouth to try these mutations so let's get started.
+
+We'll need to update our schema

@@ -5,7 +5,12 @@ const {
   GraphQLString,
   GraphQLSchema
 } = require('graphql');
+const HashMap = require('hashmap');
+
 const PersonType = require('./types/person');
+const { PostType, PostInputType } = require('./types/post');
+
+const db = new HashMap();
 
 const query = new GraphQLObjectType({
   fields: {
@@ -25,6 +30,23 @@ const query = new GraphQLObjectType({
   name: 'Query'
 });
 
+const mutation = new GraphQLObjectType({
+  fields: {
+    upsertPost: {
+      args: {
+        post: { type: PostInputType }
+      },
+      resolve(_, { post }) {
+        db.set(post.id, post.text);
+        return post;
+      },
+      type: PostType
+    }
+  },
+  name: 'Mutation'
+});
+
 module.exports = new GraphQLSchema({
+  mutation,
   query
 });
