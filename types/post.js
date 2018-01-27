@@ -8,10 +8,10 @@ const {
 
 const fields = {
   id: {
-    type: new GraphQLNonNull(GraphQLID)
+    type: GraphQLID
   },
   text: {
-    type: new GraphQLNonNull(GraphQLString)
+    type: GraphQLString
   }
 };
 
@@ -21,7 +21,10 @@ const PostType = new GraphQLObjectType({
 });
 
 const PostInputType = new GraphQLInputObjectType({
-  fields,
+  fields: Object.entries(fields).reduce((acc, [key, value]) => ({
+    ...acc,
+    [key]: { type: new GraphQLNonNull(value.type) }
+  }), {}),
   name: 'PostInputType'
 });
 
