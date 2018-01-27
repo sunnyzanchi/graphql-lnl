@@ -40,6 +40,16 @@ const query = new GraphQLObjectType({
         };
       },
       type: PostType
+    },
+    posts: {
+      description: 'Return all posts',
+      resolve() {
+        return db.entries().map(([id, text]) => ({
+          id,
+          text
+        }));
+      },
+      type: new GraphQLList(PostType)
     }
   },
   name: 'Query'
