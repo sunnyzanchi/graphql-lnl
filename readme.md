@@ -221,3 +221,5 @@ id: {
 },
 ```
 Now if we try and submit a mutation missing a non null field, GraphQL will send back an error. That's hot.
+
+If you have a little extra time, go ahead an add a query for retrieving posts so you can see posts you've added. Keep in mind that the "db" clears every time the server restarts, so if you add something then make a change in the code, you won't be able to retrieve that thing from the db. Also be careful, if you used the method of using the same `fields` object for the input and output types and you made the types non-nullable, GraphQL will error if you try and retrieve a post that doesn't exist, instead of returning null (I mean, you did technically tell it to never return null).
