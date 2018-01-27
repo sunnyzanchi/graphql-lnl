@@ -127,4 +127,97 @@ If you have a bit of extra time, you can take a minute to try and implement one 
 ## Mutations
 Querying data is great. I love querying data. But if you're less of an output kind of person and more of input kind of person, you might be tired of all these queries. Fortunately, GraphQL has mutations that allow user input. Now, technically, regular old queries can update data, cause side effects — basically anything you code them to do — but that's bad practice. GraphQL mutations are explicit in the data that they allow to be inputted and provide type checking for arguments. I know you must be foaming at the mouth to try these mutations so let's get started.
 
-We'll need to update our schema
+### Mutation in the Schema
+We'll need to update our schema by adding a mutation to it:
+```javascript
+const mutation = new GraphQLObjectType({...})
+
+module.exports = new GraphQLSchema({
+  mutation,
+  query
+});
+```
+Before we write our mutation resolver, let's give it something to work with. Since public APIs that allow updates are hard to find, and setting up a real database would take too long, we'll use a fake database, through the way of `hashmap`:
+```
+yarn add hashmap
+```
+Hashmap lets you get/set key-value pairs in memory, so it won't last after the server stops, but it will work for our purposes. Go ahead and make a new "database" in your schema:
+```javascript
+const HashMap = require('hashmap');
+const db = new HashMap();
+```
+
+Now we can use `db.set(key, value)` and `db.get(key)` where we would normally read/write to a database. So, on to setting up the mutation. The properties that you need to supply to the GraphQLObject type constructor are the exact same as what's needed in the query constructor, so this should make it easy!
+
+We're going to be setting up a mutation to add a post that looks like this:
+```javascript
+{
+  id: 123, // GraphQLID (GraphQLInt would work here but it's semantically different)
+  text: 'I eat stickers all the time dude!' // GraphQLString
+}
+```
+Give your field a name like _addPost_ or _setPost_. One thing that's different, when you add the arg how you would for the query, the `type` of the arg may be confusing. It's not just going to be a string, since we'll be supplying an object. The trick here is that GraphQL lets you defined _GraphQLInputObjectType_s. The arg for the mutation needs to be an input type, while the return value will need to be a regular (ouput) type. Gold start if you guessed it; this means we'll have to define two types!
+
+### Defining the Types
+Go ahead and add `post.js` in your types folder. You already know how to make a regular type, since you made the person type. The post type will be a lot easier, since it's only two fields! But how do you make the input type?
+
+Turns out, it's actually incredibly easy. All you have to do is write the type the exact same way, but instead of using a _GraphQLObjectType_, you have to use a _GraphQLInputObjectType_. And that's it! Make sure to name it differently, the convention is to name input types the same as the corresponding output types, just with 'InputType' at the end. There are a few caveats, like the fact that _GraphQLInputObjectType_s can't have a field as a type of _GraphQLObjectType_, it has to be another input type, and input types can't have resolver functions. But for the most part, they're the exact same!
+
+In the case of the PostType and the PostInputType, since they have the same fields, you can even deduplicate the code/effort of typing the fields separately for both of them. Simply define the fields outside of your types as something like `const fields = {...}`, then use that object in both types.
+
+When you're done, your types should look like this:
+```javascript
+const fields = {...}
+
+const PostType = new GraphQLObjectType({
+  fields,
+  name: 'PostType'
+});
+
+const PostInputType = new GraphQLInputObjectType({
+  fields,
+  name: 'PostInputType'
+});
+
+module.exports = { PostInputType, PostType };
+```
+Alright! Now that we have our types defined, let's get back to the mutation in the schema.
+
+### Mutation Resolvers
+Now that we have our post input type, make sure it's imported, then you should be able to set the arg on your mutation to the PostInputType:
+```javascript
+args: {
+  post: { type: PostInputType }
+},
+```
+Almost done! Make sure you set the return type of the mutation to PostType, same way you set the return type on your people query earlier. The last thing we need to do is write the resolve function. The syntax for the arguments and the place you get them is the same as queries:
+```javascript
+resolve(_, { post }) {
+  db.set(post.id, post.text);
+  return post;
+},
+```
+And there we go! Now we have the ability to supply the GraphQL API server with mutations. GraphQL syntax can be a little odd at times, so here's how you might do that:
+```graphql
+mutation {
+  upsertPost(post: {
+    id: 42,
+    text: "Cat in the wall, eh? Now you’re talking my language."
+  }) {
+    id
+    text
+  }
+}
+```
+You might notice a few differences from a regular query. You have to specify _mutation_ explicity. Wait. I guess that's really the only difference. You add the argument like normal, to define an object you can just use the same object literal syntax as JavaScipt, and you specify the fields you want back from the return value. Perfect.
+
+### If you were skeptical when I said perfect, good looking out. There is actually something we missed
+Yes, indeed. While this does work perfectly, you can add posts all day, and if you take the 2 minutes to add a query, you can read posts, too. The attentive coder might notice, however, that you can add a post *without* specifying an id. Oh no!
+
+This is because, by default, all types in GraphQL are nullable. If you want to make something required, we need to explicitly enforce it, and GraphQL provides GraphQLNonNull to do just that. All you have to do is wrap the type that should be non-nullable with it:
+```javascript
+id: {
+  type: new GraphQLNonNull(GraphQLID)
+},
+```
+Now if we try and submit a mutation missing a non null field, GraphQL will send back an error. That's hot.
