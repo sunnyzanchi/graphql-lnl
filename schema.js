@@ -1,6 +1,8 @@
 const axios = require('axios');
 const {
+  GraphQLID,
   GraphQLList,
+  GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema
@@ -25,6 +27,19 @@ const query = new GraphQLObjectType({
         );
         return data.results;
       }
+    },
+    post: {
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) }
+      },
+      description: 'Return a single post by the given id',
+      resolve(_, { id }) {
+        return {
+          id,
+          text: db.get(id)
+        };
+      },
+      type: PostType
     }
   },
   name: 'Query'
