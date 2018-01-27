@@ -13,13 +13,14 @@ const query = new GraphQLObjectType({
       args: {
         name: { type: GraphQLString }
       },
-      type: new GraphQLList(PersonType),
+      description: 'Search for people by name',
       async resolve(_, { name }) {
         const { data } = await axios.get(
           `https://swapi.co/api/people/?search=${name}&format=json`
         );
         return data.results;
-      }
+      },
+      type: new GraphQLList(PersonType)
     }
   },
   name: 'Query'
