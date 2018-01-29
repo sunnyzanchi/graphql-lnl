@@ -156,7 +156,7 @@ We're going to be setting up a mutation to add a post that looks like this:
   text: 'I eat stickers all the time dude!' // GraphQLString
 }
 ```
-Give your field a name like _addPost_ or _setPost_. One thing that's different, when you add the arg how you would for the query, the `type` of the arg may be confusing. It's not just going to be a string, since we'll be supplying an object. The trick here is that GraphQL lets you define a _GraphQLInputObjectType_. The arg for the mutation needs to be an input type, while the return value will need to be a regular (ouput) type. Gold start if you guessed it; this means we'll have to define two types!
+Give your field a name like _addPost_ or _setPost_. One thing that's different, when you add the arg how you would for the query, the `type` of the arg may be confusing. It's not just going to be a string, since we'll be supplying an object. The trick here is that GraphQL lets you define a _GraphQLInputObjectType_. The arg for the mutation needs to be an input type, while the return value will need to be a regular (ouput) type. Gold star if you guessed it; this means we'll have to define two types!
 
 ### Defining the Types
 Go ahead and add `post.js` in your types folder. You already know how to make a regular type, since you made the person type. The post type will be a lot easier, since it's only two fields! But how do you make the input type?
