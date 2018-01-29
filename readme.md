@@ -122,4 +122,4 @@ module.exports = new GraphQLObjectType({
 })
 ```
 
-If you have a bit of extra time, you can take a minute to try and implement one of the related fields. If you want to look at an example, this repo has the `vehicles` field added on the Person type at tag `step3.1`.
+If you have a bit of extra time, you can take a minute to try and implement one of the related fields. If you want to look at an example, this repo has the `vehicles` field added on the Person type on branch `step3.1`.
