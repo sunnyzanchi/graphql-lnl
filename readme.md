@@ -156,12 +156,12 @@ We're going to be setting up a mutation to add a post that looks like this:
   text: 'I eat stickers all the time dude!' // GraphQLString
 }
 ```
-Give your field a name like _addPost_ or _setPost_. One thing that's different, when you add the arg how you would for the query, the `type` of the arg may be confusing. It's not just going to be a string, since we'll be supplying an object. The trick here is that GraphQL lets you defined _GraphQLInputObjectType_s. The arg for the mutation needs to be an input type, while the return value will need to be a regular (ouput) type. Gold start if you guessed it; this means we'll have to define two types!
+Give your field a name like _addPost_ or _setPost_. One thing that's different, when you add the arg how you would for the query, the `type` of the arg may be confusing. It's not just going to be a string, since we'll be supplying an object. The trick here is that GraphQL lets you define a _GraphQLInputObjectType_. The arg for the mutation needs to be an input type, while the return value will need to be a regular (ouput) type. Gold start if you guessed it; this means we'll have to define two types!
 
 ### Defining the Types
 Go ahead and add `post.js` in your types folder. You already know how to make a regular type, since you made the person type. The post type will be a lot easier, since it's only two fields! But how do you make the input type?
 
-Turns out, it's actually incredibly easy. All you have to do is write the type the exact same way, but instead of using a _GraphQLObjectType_, you have to use a _GraphQLInputObjectType_. And that's it! Make sure to name it differently, the convention is to name input types the same as the corresponding output types, just with 'InputType' at the end. There are a few caveats, like the fact that _GraphQLInputObjectType_s can't have a field as a type of _GraphQLObjectType_, it has to be another input type, and input types can't have resolver functions. But for the most part, they're the exact same!
+Turns out, it's actually incredibly easy. All you have to do is write the type the exact same way, but instead of using a _GraphQLObjectType_, you have to use a _GraphQLInputObjectType_. And that's it! Make sure to name it differently, the convention is to name input types the same as the corresponding output types, just with 'InputType' at the end. There are a few caveats, like the fact that a _GraphQLInputObjectType_ can't have a field as a type of _GraphQLObjectType_, it has to be another input type, and input types can't have resolver functions. But for the most part, they're the exact same!
 
 In the case of the PostType and the PostInputType, since they have the same fields, you can even deduplicate the code/effort of typing the fields separately for both of them. Simply define the fields outside of your types as something like `const fields = {...}`, then use that object in both types.
 
