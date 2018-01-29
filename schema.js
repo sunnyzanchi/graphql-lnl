@@ -1,3 +1,5 @@
+// These are built-in GraphQL types. These are used for type enforcement
+// on input and output values
 const { GraphQLObjectType, GraphQLString, GraphQLSchema } = require('graphql');
 
 const query = new GraphQLObjectType({
