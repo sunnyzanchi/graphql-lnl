@@ -14,11 +14,11 @@
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",
     "graphql": "^0.12.3",
-    "hashmap": "^2.3.0",
-    "nodemon": "^1.14.11"
+    "hashmap": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^4.16.0",
-    "eslint-config-gsandf": "^1.0.0"
+    "eslint-config-gsandf": "^1.0.0",
+    "nodemon": "^1.14.11"
   }
 }
